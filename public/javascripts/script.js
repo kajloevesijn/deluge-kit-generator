@@ -7,6 +7,8 @@ const list_item_template = document.getElementById("list-item-template").content
 let sample_list = document.querySelectorAll(".sample-list-item");
 let file_list = new Array(0);
 
+let currently_playing_sample = new Audio();
+
 function initialize() {
     autoAnimate(sample_list_parent);
     ready_dropzone();
@@ -18,7 +20,7 @@ function set_button_event_listeners(element, sample_name) { // change this later
     element.getElementsByClassName("sample-list-button-down")[0].addEventListener('click', move_sample_down);
     element.getElementsByClassName("sample-list-button-remove")[0].addEventListener('click', remove_sample_from_list);
     element.getElementsByClassName("sample-list-button-play")[0].addEventListener('click', () => {
-        play_sample(`placeholder : playing ${sample_name}`);
+        play_sample(sample_name);
     });
 }
 
@@ -62,7 +64,21 @@ function remove_sample_from_list() {
 }
 
 function play_sample(sample_to_play) {
-    console.log(sample_to_play);
+
+    file_list.forEach((sample) => {
+        if (sample.name.toString() == sample_to_play) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                currently_playing_sample.pause();
+                currently_playing_sample = new Audio(e.target.result);
+                currently_playing_sample.play();
+            };
+
+            reader.readAsDataURL(sample);
+            return;
+        }
+    });
 }
 
 function add_new_sample_list_element(sample_name) {
@@ -132,9 +148,18 @@ function dropzone_drop(event) {
     let files = event_data.files;
 
     for (let i = 0; i < files.length; i++) {
-        if (files[i].size <= 10000000 && files[i].type == "audio/wav") { // file accepted
-            file_list.push(files[i]);
-            add_new_sample_list_element(files[i].name);
+        if (files[i].size <= 10000000 && files[i].type == "audio/wav") { // file type and size accepted
+            let duplicate_found = false;
+            file_list.forEach((sample) => {
+                if (sample.name == files[i].name) {
+                    console.log("duplicate name found");
+                    duplicate_found = true;
+                }
+            })
+            if (!duplicate_found) {
+                file_list.push(files[i]);
+                add_new_sample_list_element(files[i].name);
+            }
         }
     }
 }
