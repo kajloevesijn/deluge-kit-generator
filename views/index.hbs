@@ -1,108 +1,63 @@
-<section aria-labelledby="billing-history-heading">
+<section aria-labelledby="heading">
   <div class="bg-white mt-6 pt-6 shadow sm:overflow-hidden sm:rounded-md">
-    <div class="px-4 sm:px-6">
+    <div class="px-4 sm:px-6 flex">
       <h2
-        id="billing-history-heading"
-        class="text-lg font-medium leading-6 text-gray-900"
-      >Drag samples to start</h2>
+        id="heading"
+        class="text-lg font-medium leading-6 text-gray-900 basis-5/6 grow-1"
+      >Sample list</h2>
+            <div id="export-kit-button" class="ml-4 bg-blue-50 p-1 rounded hover:bg-blue-200 active:bg-blue-50 basis-1/6 grow-1">
+        <p class="text-lg font-medium text-center">Export Kit</p>
+      </div>
     </div>
+
     <div class="mt-6 flex flex-col">
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="overflow-hidden border-t border-gray-200">
-            {{#if upload}}
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-sm font-semibold text-gray-900"
-                    >Name</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-sm font-semibold text-gray-900"
-                    >Duration</th>
-                    <th
-                      scope="col"
-                      class="px-6 py-3 text-left text-sm font-semibold text-gray-900"
-                    >Size</th>
-                    <!--
-                            `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
-                          -->
-                    <th
-                      scope="col"
-                      class="relative px-6 py-3 text-left text-sm font-medium text-gray-500"
-                    >
-                      <span class="sr-only">Remove</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200 bg-white">
-                  {{#each samples}}
-                    <tr>
-                      <td
-                        class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900"
-                      >
-                        <time datetime="2020-01-01">{{this}}</time>
-                      </td>
-                      <td
-                        class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                      >Business Plan - Annual Billing</td>
-                      <td
-                        class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                      >CA$109.00</td>
-                      <td
-                        class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium"
-                      >
-                        <a
-                          href="#"
-                          class="text-orange-600 hover:text-orange-900"
-                        >Remove</a>
-                      </td>
-                    </tr>
-                  {{/each}}
-                </tbody>
-              </table>
-            {{else}}
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <div class="overflow-hidden bg-white shadow sm:rounded-md">
+                  <ul role="list" id="sample-list-parent" class="divide-y divide-gray-200">
+
+                </ul>
+              </tbody>
+            </table>
+            <div id="file-upload-area">
               <div class="mt-1 sm:col-span-2 sm:mt-0">
-                <div
-                  class="flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6"
-                >
-                  <div class="space-y-1 text-center">
-                    <svg
-                      class="mx-auto h-12 w-12 text-gray-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                    <div class="flex text-sm text-gray-600">
-                      <label
-                        for="file-upload"
-                        class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+                <div class="flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                  <div id="file-upload-area-content">
+                    <div class="space-y-1 text-center">
+                      <svg
+                        class="mx-auto h-12 w-12 text-gray-400"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 25 25"
+                        aria-hidden="true"
                       >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          class="sr-only"
-                        />
-                      </label>
-                      <p class="pl-1">or drag and drop</p>
+                      <path opacity="0" d="M17.8284 6.82843C18.4065 7.40649 18.6955 7.69552 18.8478 8.06306C19 8.4306 19 8.83935 19 9.65685L19 17C19 18.8856 19 19.8284 18.4142 20.4142C17.8284 21 16.8856 21 15 21H9C7.11438 21 6.17157 21 5.58579 20.4142C5 19.8284 5 18.8856 5 17L5 7C5 5.11438 5 4.17157 5.58579 3.58579C6.17157 3 7.11438 3 9 3H12.3431C13.1606 3 13.5694 3 13.9369 3.15224C14.3045 3.30448 14.5935 3.59351 15.1716 4.17157L17.8284 6.82843Z" fill="#323232"/>
+                      <path d="M17.8284 6.82843C18.4065 7.40649 18.6955 7.69552 18.8478 8.06306C19 8.4306 19 8.83935 19 9.65685L19 17C19 18.8856 19 19.8284 18.4142 20.4142C17.8284 21 16.8856 21 15 21H9C7.11438 21 6.17157 21 5.58579 20.4142C5 19.8284 5 18.8856 5 17L5 7C5 5.11438 5 4.17157 5.58579 3.58579C6.17157 3 7.11438 3 9 3H12.3431C13.1606 3 13.5694 3 13.9369 3.15224C14.3045 3.30448 14.5935 3.59351 15.1716 4.17157L17.8284 6.82843Z" stroke="#323232" stroke-width="2" stroke-linejoin="round"/>
+                      <path d="M12 11L12 16" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M14.5 13.5L9.5 13.5" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      </svg>
+                      <div class="flex text-sm text-gray-600">
+                        <label
+                          for="file-upload"
+                          class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+                        >
+                        </label>
+                        <p class="pl-1">drag and drop your WAV files up to 10MB here</p>
+                      </div>
                     </div>
-                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                   </div>
                 </div>
               </div>
-            {{/if}}
+            </div>
           </div>
         </div>
       </div>
@@ -110,6 +65,42 @@
   </div>
 </section>
 
-<template id="template">
-  <div>Click me</div>
+<template id="list-item-template">
+  <li class="sample-list-item" sample-list-index="index">
+    <a class="block hover:bg-gray-50">
+      <div class="flex items-center px-4 py-4 sm:px-6">
+        <div class="flex min-w-0 flex-1 items-center">                            
+          <div class="sample-list-button-play rounded p-1 bg-blue-50 hover:bg-blue-200 active:bg-blue-50 flex-shrink-0">
+<svg width="40px" height="40px" viewBox="0 0 72 72" id="emoji" xmlns="http://www.w3.org/2000/svg">
+  <g id="line">
+    <path fill="#000000" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M19.5816,55.6062 c0.4848,0.1782,1.0303,0.297,1.5758,0.297c0.8485,0,1.697-0.297,2.4242-0.7722l30-15.9793l0.303-0.297 c0.7879-0.7722,1.2121-1.7227,1.2121-2.7919c0-1.0692-0.4242-2.0791-1.2121-2.7919l-0.303-0.297l-30-16.0981 c-1.0909-0.8316-2.6667-1.0098-4-0.4752c-1.5152,0.594-2.4848,2.0791-2.4848,3.683v31.8397 C17.0967,53.5272,18.0664,55.0122,19.5816,55.6062z"/>
+  </g>
+</svg>
+          </div>
+          <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+            <div>
+              <p class="sample-list-filename truncate text-sm font-medium text-indigo-600">Audio-{{@index}}.wav</p>
+            </div>
+            <div class="sample-list-waveform">
+              <p>waveform display.exe</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="sample-list-button-up rounded-t p-1 bg-blue-50 hover:bg-blue-200 active:bg-blue-50">
+          <svg width="20px" height="20px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 768l56.768-50.432L512 256l-448 461.568 56.768 50.432L512 364.928z" fill="#000000" /></svg>
+          </div>
+          <hr>
+          <div class="sample-list-button-down bg-blue-50 p-1 rounded-b hover:bg-blue-200 active:bg-blue-50">
+            <svg width="20px" height="20px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#000000" /></svg>
+          </div>                           
+        </div>
+        <div class=" sample-list-button-remove ml-4 bg-blue-50 p-1 rounded hover:bg-blue-200 active:bg-blue-50">
+          <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 8L8 16M8.00001 8L16 16" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </a>
+  </li>
 </template>
