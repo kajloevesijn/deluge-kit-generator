@@ -1,20 +1,32 @@
 {
-  "name": "deluge-kit-generator",
-  "version": "0.0.1",
+  "name": "deluge-preset-builder",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon app.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "^4.18.2",
-    "hbs": "^4.2.0",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "@heroicons/react": "^2.0.17",
+    "@react-three/fiber": "^8.13.0",
+    "@types/node": "18.16.2",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
+    "@types/three": "^0.150.2",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.1",
+    "next": "13.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "three": "^0.152.1",
+    "typescript": "5.0.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "autoprefixer": "^10.4.14",
+    "next-transpile-modules": "^10.0.0",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
   }
 }
