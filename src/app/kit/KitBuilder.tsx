@@ -1,11 +1,50 @@
-import React from 'react';
+'use client'
+import React,{useRef, useState} from 'react';
 import { SamplePanel } from './SamplePanel';
 
 export const KitBuilder = () => {
-    const sampleList = [1,2,3,4,5,6,7,8,9,10,11,12];
+    const sampleList = useRef<sampleData[]>([]);
+
+    const sampleTestCount = 10;
 
     type sampleData = {
         name: string
+    }
+
+
+    useState(()=>{
+      for (let index = 0; index < sampleTestCount; index++) {
+        let newData: sampleData = {
+          name: (Math.random() * 1000000).toString() + '.wav'
+        }
+        sampleList.current.push(newData);
+      }
+  
+
+    })
+
+    function buttonHandler(action: string){
+      console.log(action);
+      switch (action) {
+        case 'up':
+          
+          break;
+
+          case 'down':
+
+          break;
+
+          case 'play':
+          
+          break;
+
+          case 'delete':
+
+          break;
+      
+        default:
+          break;
+      }
     }
 
   return (
@@ -13,9 +52,9 @@ export const KitBuilder = () => {
       <div className=" mx-auto max-w-7xl px-6 lg:px-8">
         <div className='ring-1 p-2 rounded-md bg-slate-600/50'>
         <div className="mx-auto grid grid-cols-1">
-            {sampleList.map((listPos) =>{
+            {sampleList.current.map((listPos) =>{
                 return<>
-                    <SamplePanel key={listPos} sampleName={`test sample ${listPos}`}/>
+                    <SamplePanel buttonHandler={buttonHandler} sampleName={`test sample ${listPos.name}`}/>
                 </>
             })}
         </div>
