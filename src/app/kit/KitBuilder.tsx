@@ -2,24 +2,19 @@
 import React,{useEffect, useState} from 'react';
 import { SamplePanel } from './SamplePanel';
 import { FileDropArea } from '../components/FileDropArea';
+import {FolderPlusIcon} from '@heroicons/react/24/solid';
 
 export const KitBuilder = () => {
-    const [sampleList, setSampleList] = useState<sampleData[]>([]);
+    const [sampleList, setSampleList] = useState<SampleData[]>([]);
 
-    const sampleTestCount = 10;
-
-    type sampleData = {
-        name: string
-    }
-
-
+    const sampleTestCount = 3;
 
     useEffect(()=>{
 
-      let newData: sampleData[] = [];
+      let newData: SampleData[] = [];
 
       for (let index = 0; index < sampleTestCount; index++) {
-        let sampleElement: sampleData = {
+        let sampleElement: SampleData = {
           name: (Math.random() * 1000000).toString() + '.wav'
         };
   
@@ -29,7 +24,7 @@ export const KitBuilder = () => {
       setSampleList([...sampleList,  ...newData]);
     },[])
 
-    function buttonHandler(action: string, data:sampleData){
+    function buttonHandler(action: string, data:SampleData){
       console.log(action);
       switch (action) {
         case 'up':
@@ -53,6 +48,10 @@ export const KitBuilder = () => {
       }
     }
 
+    function addSamples(samples:SampleData[]){
+      setSampleList([...sampleList, ...samples]);
+    }
+
   return (
     <div className="w-full backdrop-blur-md relative isolate overflow-hidden bg-gray-900/50 py-24 sm:py-32 rounded-xl">
       <div className=" mx-auto max-w-7xl px-6 lg:px-8">
@@ -64,7 +63,7 @@ export const KitBuilder = () => {
                   </div>
             })}
         </div>
-        <FileDropArea />
+        <FileDropArea onDropAccepted={addSamples} Icon={FolderPlusIcon} descriptionText="drag your .wav files of up to 10mb per file here" />
         </div>
       </div>
     </div>
