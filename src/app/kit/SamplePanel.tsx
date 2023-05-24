@@ -7,16 +7,16 @@ export const SamplePanel = ({...props}) => {
   return (
     <div className='rounded-md bg-slate-500/50 flex items-center p-2 gap-2 border-slate-500 border-2'>
 
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="play" buttonSize={40} Icon={PlayIcon}/>
+        <IconButton buttonHandler={props.buttonHandler} buttonAction="play" index={props.index} buttonSize={40} Icon={PlayIcon}/>
         
         <p className='grow truncate'>{props.sampleName}</p>
 
         <div className='grid float-right'>
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="up" buttonSize={20} Icon={ChevronUpIcon}/>
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="down" buttonSize={20} Icon={ChevronDownIcon}/>
+        <IconButton buttonHandler={props.buttonHandler} buttonAction="up" index={props.index} buttonSize={20} Icon={ChevronUpIcon}/>
+        <IconButton buttonHandler={props.buttonHandler} buttonAction="down" index={props.index} buttonSize={20} Icon={ChevronDownIcon}/>
         </div>
 
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="delete" buttonSize={40} Icon={XMarkIcon}/>
+        <IconButton buttonHandler={props.buttonHandler} buttonAction="delete" index={props.index} buttonSize={40} Icon={XMarkIcon}/>
     </div>
   )
 }

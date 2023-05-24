@@ -3,7 +3,7 @@ import React from 'react'
 
 export const IconButton = ({...props}) => {
     function clickHandler() {
-        props.buttonHandler(props.buttonAction);
+        props.buttonHandler(props.buttonAction, props.index);
     }
 
   return <>
