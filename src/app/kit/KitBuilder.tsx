@@ -1,67 +1,100 @@
-'use client'
-import React,{useEffect,useState, useRef} from 'react';
-import { SamplePanel } from './SamplePanel';
-import { FileDropArea } from '../components/FileDropArea';
-import {FolderPlusIcon} from '@heroicons/react/24/solid';
-import { useSampleContext } from '../components/contexts/SampleContext';
-import { DragDropContext, Droppable, Draggable, DropResult,  } from '@hello-pangea/dnd'; 
+"use client";
+import React, { useEffect, useState, useRef } from "react";
+import { SamplePanel } from "./SamplePanel";
+import { FileDropArea } from "../components/FileDropArea";
+import { FolderPlusIcon } from "@heroicons/react/24/solid";
+import { useSampleContext } from "../components/contexts/SampleContext";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DragStart,
+} from "@hello-pangea/dnd";
+import { DescriptiveButton } from "../components/DescriptiveButton";
 
 export const KitBuilder = () => {
-    const { sampleList, addSamples } = useSampleContext();
+  const { sampleList, addSamples, rebuildList } = useSampleContext();
+  let dragging = false;
 
-    function buttonHandler(action: string, index:number){
-      console.log(action, index);
-      switch (action) {
-        case 'up':
-          
-          break;
+  function dragEnded(result: DropResult) {
+    const { source, destination, type } = result;
+    dragging = false;
 
-          case 'down':
+    if (source.index === destination?.index) {
+      return;
+    }
 
-          break;
+    if (type === "DEFAULT" && destination) {
+      const reorderedSamples = [...sampleList];
+      const sourceIndex = source.index;
+      const destinationIndex = destination.index;
+      const [removedSample] = reorderedSamples.splice(sourceIndex, 1);
+      reorderedSamples.splice(destinationIndex, 0, removedSample);
+      rebuildList(reorderedSamples);
+    }
+  }
 
-          case 'play':
-          
-          break;
-
-          case 'delete':
-
-          break;
-      
-        default:
-          break;
-      }
-    } 
-
-  function dragEnded(result:DropResult){
-    console.log(result);
+  function dragStarted(result: DragStart) {
+    dragging = true;
   }
 
   return (
-    <div className="w-full backdrop-blur-md relative isolate overflow-hidden bg-gray-900/50 py-24 sm:py-32 rounded-xl">
-      <div className=" mx-auto max-w-7xl px-6 lg:px-8">
-        <div className='ring-1 p-2 rounded-md bg-slate-600/50'>
-        <DragDropContext onDragEnd={dragEnded}>
+    <>
+      <div className="flex my-4 align-middle items-center">
+        <DescriptiveButton name="BACK" link="/" />
+        <div className="grow">
+          <p className="text-neutral-content align-middle text-center h-full font-bold text-2xl ">
+            KIT
+          </p>
+        </div>
+        <button className="btn btn-md btn-primary z-10">export kit</button>
+        {/* TODO: when re-occuring, create a new react component for this button */}
+      </div>
 
-          <Droppable droppableId={'sampleList'}>
-            {(provided) =>(
-              <div className="mx-auto grid grid-cols-1" {...provided.droppableProps} ref={provided.innerRef}>
-                {sampleList.map((listPos, index) =>(
-                  <Draggable draggableId={index.toString()} key={index} index={index}>
-                    {(provided =>(
-                      <div key={index} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-                        <SamplePanel  buttonHandler={buttonHandler} index={index} sampleName={`test sample ${listPos.name}`}/>
-                      </div>
-                    ))}
-                  </Draggable>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <FileDropArea onDropAccepted={addSamples} Icon={FolderPlusIcon} descriptionText="drag your .wav files of up to 10mb per file here" />
+      <div className="card card-bordered w-full bg-neutral-content/20">
+        <div className="p-2">
+          <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
+            <Droppable droppableId={"sampleList"}>
+              {(provided) => (
+                <div
+                  className=" mx-auto grid grid-cols-1 transition "
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {sampleList.map((listPos, index) => (
+                    <Draggable
+                      draggableId={index.toString()}
+                      key={index}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          key={index}
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                          ref={provided.innerRef}
+                        >
+                          <SamplePanel
+                            index={index}
+                            sampleName={listPos.name}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+          {sampleList.length !== 0 && <div className="m-0.5"></div>}
+          <FileDropArea
+            onDropAccepted={addSamples}
+            Icon={FolderPlusIcon}
+            descriptionText="drag your .wav files of up to 10mb per file here"
+          />
         </div>
       </div>
-    </div>
-  )
-}
+    </>
+  );
+};

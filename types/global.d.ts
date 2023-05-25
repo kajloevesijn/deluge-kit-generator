@@ -1,3 +1,5 @@
 declare interface SampleData {
-    name: string;
+  name: string;
+  sampleCount: number;
+  audioBuffer: AudioBuffer;
 }

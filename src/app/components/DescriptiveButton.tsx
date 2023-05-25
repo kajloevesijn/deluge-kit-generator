@@ -1,19 +1,23 @@
-import React from 'react'
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
-type DescriptiveButtonProps = {
-    [key: string]: string
-}
-
-export const DescriptiveButton = (props: DescriptiveButtonProps) => {
+export const DescriptiveButton = ({ ...props }) => {
   return (
-    <button key={props.name} className="transition ease-in-out duration-150 active:duration-0 active:shadow-inner hover:shadow-md active:text-white hover:-translate-y-1 active:translate-y-0 active:bg-white/10 active:scale-100 gap-x-4 rounded-xl bg-white/5 hover:ring-2 ring-1 ring-inset ring-white/10">
-        <Link className='' href={props.link}>
-            <div className="text-base p-6 leading-7">
-                <h3 className="font-semibold text-white">{props.name}</h3>
-                <p className="mt-2 text-gray-400">{props.description}</p>
-            </div>
-        </Link>
-    </button>
-  )
-}
+    <>
+      <Link
+        aria-disabled={props.disabled}
+        className="btn btn-primary backdrop-blur-sm"
+        href={props.disabled == false ? props.link : "/"}
+      >
+        <button key={props.name} className="">
+          <div className="p-4">
+            <h2 className="font-bold underline-offset-2 text-primary-content ">
+              {props.name}
+            </h2>
+            <p className="mt-4">{props.description}</p>
+          </div>
+        </button>
+      </Link>
+    </>
+  );
+};

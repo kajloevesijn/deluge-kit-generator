@@ -1,22 +1,32 @@
-'use client'
-import React from 'react'
-import {PlayIcon,ChevronDownIcon,ChevronUpIcon,XMarkIcon} from '@heroicons/react/24/solid';
-import { IconButton } from '../components/IconButton';
+"use client";
+import React from "react";
+import {
+  PlayIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+import { IconButton } from "../components/IconButton";
+import { useSampleContext } from "../components/contexts/SampleContext";
 
-export const SamplePanel = ({...props}) => {
+export const SamplePanel = ({ ...props }) => {
+  const { removeSample, playSample } = useSampleContext();
+
   return (
-    <div className='rounded-md bg-slate-500/50 flex items-center p-2 gap-2 border-slate-500 border-2'>
-
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="play" index={props.index} buttonSize={40} Icon={PlayIcon}/>
-        
-        <p className='grow truncate'>{props.sampleName}</p>
-
-        <div className='grid float-right'>
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="up" index={props.index} buttonSize={20} Icon={ChevronUpIcon}/>
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="down" index={props.index} buttonSize={20} Icon={ChevronDownIcon}/>
-        </div>
-
-        <IconButton buttonHandler={props.buttonHandler} buttonAction="delete" index={props.index} buttonSize={40} Icon={XMarkIcon}/>
+    <div className=" flex items-center p-2 gap-2 border-2 bg-neutral/50 hover:bg-neutral/30 border-primary rounded-lg backdrop-blur-sm m-0.5 hover:-translate-y-0.5 transition hover:drop-shadow-md">
+      <IconButton
+        buttonHandler={() => playSample(props.index)}
+        index={props.index}
+        buttonSize={40}
+        Icon={PlayIcon}
+      />
+      <p className="grow truncate text-white">{props.sampleName}</p>
+      <IconButton
+        buttonHandler={() => removeSample(props.index)}
+        index={props.index}
+        buttonSize={40}
+        Icon={XMarkIcon}
+      />
     </div>
-  )
-}
+  );
+};

@@ -1,30 +1,62 @@
-import React from 'react'
-import {FolderPlusIcon} from '@heroicons/react/24/solid';
-export const FileDropArea = ({...props}) => {
-
-  function processDrop(event:React.DragEvent<HTMLDivElement>){
+import React from "react";
+import { FolderPlusIcon } from "@heroicons/react/24/solid";
+import { arrayBuffer } from "stream/consumers";
+export const FileDropArea = ({ ...props }) => {
+  function processDrop(event: React.DragEvent<HTMLDivElement>) {
     event.stopPropagation();
     event.preventDefault();
     console.log(event.dataTransfer.files);
+    let offlineContext = new OfflineAudioContext(2, 48000 * 40, 48000);
 
-    let uploadedSamples:SampleData[] = []
+    let acceptedSample: SampleData;
 
-    Array.from(event.dataTransfer.files).forEach((file)=>{
-      uploadedSamples.push({ name: file.name})
+    Array.from(event.dataTransfer.files).forEach((file, index) => {
+      if (file.type !== "audio/wav") {
+        console.log("file is of the wrong format");
+        return;
+      }
+
+      if (file.size >= 10000000) {
+        console.log("file is too large.");
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function (e: ProgressEvent<FileReader>) {
+        if (e.target?.result instanceof ArrayBuffer) {
+          offlineContext
+            .decodeAudioData(e.target.result)
+            .then((buffer: AudioBuffer) => {
+              acceptedSample = {
+                name: file.name,
+                sampleCount: buffer.length,
+                audioBuffer: buffer,
+              };
+              props.onDropAccepted(acceptedSample);
+            })
+            .catch((err: DOMException) => {
+              console.error(`Error with decoding audio data: ${err}`);
+            });
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
     });
-
-    props.onDropAccepted(uploadedSamples);
-
   }
-  
-  function handleDragOver(event:React.DragEvent<HTMLDivElement>) {
+
+  function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
   }
 
   return (
-    <div className='rounded-md bg-slate-500/50 border-slate-500 border-2 border-dashed text-slate-500 p-4 mt-2' onDrop={processDrop} onDragOver={handleDragOver}>
+    <div
+      className="rounded-xl bg-neutral/50 border-primary border-2 border-dashed text-neutral-content backdrop-blur-md p-4"
+      onDrop={processDrop}
+      onDragOver={handleDragOver}
+    >
       <props.Icon className=" block m-auto" width={100} />
       <p className=" text-center">{props.descriptionText}</p>
     </div>
-  )
-}
+  );
+};
