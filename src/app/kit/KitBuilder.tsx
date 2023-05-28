@@ -44,7 +44,7 @@ export const KitBuilder = () => {
       <div className="flex my-4 align-middle items-center">
         <DescriptiveButton name="BACK" link="/" />
         <div className="grow">
-          <p className="text-neutral-content align-middle text-center h-full font-bold text-2xl ">
+          <p className="text-base-content align-middle text-center h-full font-bold text-2xl select-none">
             KIT
           </p>
         </div>
@@ -52,7 +52,7 @@ export const KitBuilder = () => {
         {/* TODO: when re-occuring, create a new react component for this button */}
       </div>
 
-      <div className="card card-bordered w-full bg-neutral-content/20">
+      <div className="card card-bordered w-full bg-base-100/20">
         <div className="p-2">
           <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
             <Droppable droppableId={"sampleList"}>
@@ -68,7 +68,7 @@ export const KitBuilder = () => {
                       key={index}
                       index={index}
                     >
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           key={index}
                           {...provided.dragHandleProps}
@@ -76,6 +76,7 @@ export const KitBuilder = () => {
                           ref={provided.innerRef}
                         >
                           <SamplePanel
+                            isDragging={snapshot.isDragging}
                             index={index}
                             sampleName={listPos.name}
                           />
@@ -83,6 +84,7 @@ export const KitBuilder = () => {
                       )}
                     </Draggable>
                   ))}
+                  {provided.placeholder}
                 </div>
               )}
             </Droppable>

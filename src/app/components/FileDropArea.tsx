@@ -1,13 +1,13 @@
 import React from "react";
-import { FolderPlusIcon } from "@heroicons/react/24/solid";
-import { arrayBuffer } from "stream/consumers";
+import { processAudioBuffer } from "./audio/WaveformRenderer";
+
 export const FileDropArea = ({ ...props }) => {
+
   function processDrop(event: React.DragEvent<HTMLDivElement>) {
     event.stopPropagation();
     event.preventDefault();
-    console.log(event.dataTransfer.files);
-    let offlineContext = new OfflineAudioContext(2, 48000 * 40, 48000);
 
+    let offlineContext = new OfflineAudioContext(2, 48000 * 40, 48000);
     let acceptedSample: SampleData;
 
     Array.from(event.dataTransfer.files).forEach((file, index) => {
@@ -16,7 +16,7 @@ export const FileDropArea = ({ ...props }) => {
         return;
       }
 
-      if (file.size >= 10000000) {
+      if (file.size >= 1000000000) {
         console.log("file is too large.");
         return;
       }
@@ -28,12 +28,18 @@ export const FileDropArea = ({ ...props }) => {
           offlineContext
             .decodeAudioData(e.target.result)
             .then((buffer: AudioBuffer) => {
-              acceptedSample = {
-                name: file.name,
-                sampleCount: buffer.length,
-                audioBuffer: buffer,
-              };
-              props.onDropAccepted(acceptedSample);
+              console.log(buffer.duration);
+
+              processAudioBuffer(buffer, 50).then((averages) => {
+                acceptedSample = {
+                  name: file.name,
+                  sampleCount: buffer.length,
+                  audioBuffer: buffer,
+                  waveformCache: averages,
+                  sampleLengthInSeconds: buffer.duration
+                };
+                props.onDropAccepted(acceptedSample);
+              })
             })
             .catch((err: DOMException) => {
               console.error(`Error with decoding audio data: ${err}`);
@@ -51,12 +57,12 @@ export const FileDropArea = ({ ...props }) => {
 
   return (
     <div
-      className="rounded-xl bg-neutral/50 border-primary border-2 border-dashed text-neutral-content backdrop-blur-md p-4"
+      className="rounded-xl bg-base-300/50 border-primary border-2 border-dashed text-base-content backdrop-blur-sm p-4"
       onDrop={processDrop}
       onDragOver={handleDragOver}
     >
       <props.Icon className=" block m-auto" width={100} />
-      <p className=" text-center">{props.descriptionText}</p>
+      <p className=" text-center select-none">{props.descriptionText}</p>
     </div>
   );
 };

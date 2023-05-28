@@ -1,12 +1,13 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import useAudioPlayer from "../audio/useAudioPlayer";
+import { processAudioBuffer } from "../audio/WaveformRenderer";
 
 interface SampleContextData {
   sampleList: SampleData[];
   addSamples: (sample: SampleData) => void;
   rebuildList: (newList: SampleData[]) => void;
   removeSample: (index: number) => void;
-  playSample: (index: number) => void;
 }
 
 // Define the context
@@ -30,10 +31,6 @@ export const SampleProvider: React.FC<{ children: ReactNode }> = ({
     rebuildList(reorderedSamples);
   };
 
-  const playSample = (index: number) => {
-    console.log(index);
-  };
-
   const rebuildList = (newList: SampleData[]) => {
     setSampleList(newList);
   };
@@ -41,7 +38,7 @@ export const SampleProvider: React.FC<{ children: ReactNode }> = ({
   // Provide state and methods to children
   return (
     <SampleContext.Provider
-      value={{ sampleList, addSamples, rebuildList, removeSample, playSample }}
+      value={{ sampleList, addSamples, rebuildList, removeSample }}
     >
       {children}
     </SampleContext.Provider>

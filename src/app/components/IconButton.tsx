@@ -8,7 +8,7 @@ export const IconButton = ({ ...props }) => {
 
   return (
     <>
-      <button onClick={clickHandler} className="btn btn-primary btn-square">
+      <button onClick={clickHandler} className="btn btn-primary btn-square border-2 active:border-primary-content">
         <props.Icon width={props.buttonSize} />
       </button>
     </>

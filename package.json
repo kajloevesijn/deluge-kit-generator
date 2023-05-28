@@ -24,7 +24,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "three": "^0.152.1",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "wavesurfer.js": "^7.0.0-beta.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
