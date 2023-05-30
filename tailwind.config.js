@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       dropShadow: {
-        'hard': '0 16px 16px rgba(0, 0, 0, .75)',
+        'hard': '0 16px 16px rgba(0, 0, 0, .6)',
       },
       boxShadow: {
         'glow': '1 10px 10px 10px rgba(255, 255, 255, .5)',

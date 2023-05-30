@@ -61,8 +61,8 @@ export const KitBuilder = () => {
         {/* TODO: when re-occuring, create a new react component for this button */}
       </div>
 
-      <div className="card card-bordered w-full bg-base-100/20">
-        <div className="p-2">
+      <div className="">
+        <div className="">
           <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
             <Droppable droppableId={"sampleList"}>
               {(provided) => (

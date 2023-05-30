@@ -27,7 +27,7 @@ export const FileDropArea = ({ ...props }) => {
           offlineContext
             .decodeAudioData(e.target.result)
             .then((buffer: AudioBuffer) => {
-              processAudioBuffer(buffer, 100).then((averages) => {
+              processAudioBuffer(buffer, 50).then((averages) => {
                 acceptedSample = {
                   name: file.name,
                   sampleCount: buffer.length,

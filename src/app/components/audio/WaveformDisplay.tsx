@@ -27,9 +27,9 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({
               style={{ height: `${value * height}px` }}
               className={`transition ${
                 index * progressIncrement <= progress && audioPlaying === true
-                  ? "bg-primary-content"
+                  ? "bg-secondary"
                   : "bg-primary-content/50"
-              } rounded-sm w-px m-px ring-1 ring-primary self-center select-none`}
+              } rounded-sm w-1 m-px self-center select-none`}
             ></div>
           );
         })}
