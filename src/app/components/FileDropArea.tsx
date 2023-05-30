@@ -2,7 +2,6 @@ import React from "react";
 import { processAudioBuffer } from "./audio/WaveformRenderer";
 
 export const FileDropArea = ({ ...props }) => {
-
   function processDrop(event: React.DragEvent<HTMLDivElement>) {
     event.stopPropagation();
     event.preventDefault();
@@ -28,18 +27,17 @@ export const FileDropArea = ({ ...props }) => {
           offlineContext
             .decodeAudioData(e.target.result)
             .then((buffer: AudioBuffer) => {
-              console.log(buffer.duration);
-
-              processAudioBuffer(buffer, 50).then((averages) => {
+              processAudioBuffer(buffer, 100).then((averages) => {
                 acceptedSample = {
                   name: file.name,
                   sampleCount: buffer.length,
                   audioBuffer: buffer,
                   waveformCache: averages,
-                  sampleLengthInSeconds: buffer.duration
+                  sampleLengthInSeconds: buffer.duration,
+                  file: file,
                 };
                 props.onDropAccepted(acceptedSample);
-              })
+              });
             })
             .catch((err: DOMException) => {
               console.error(`Error with decoding audio data: ${err}`);

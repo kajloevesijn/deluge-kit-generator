@@ -12,6 +12,8 @@ import {
   DragStart,
 } from "@hello-pangea/dnd";
 import { DescriptiveButton } from "../components/DescriptiveButton";
+import { createExport } from "../components/FileZipper";
+import export_kit from "../components/KitExporter";
 
 export const KitBuilder = () => {
   const { sampleList, addSamples, rebuildList } = useSampleContext();
@@ -48,7 +50,14 @@ export const KitBuilder = () => {
             KIT
           </p>
         </div>
-        <button className="btn btn-md btn-primary z-10">export kit</button>
+        <button
+          className="btn btn-md btn-primary z-10"
+          onClick={() => {
+            export_kit(sampleList);
+          }}
+        >
+          export kit
+        </button>
         {/* TODO: when re-occuring, create a new react component for this button */}
       </div>
 
