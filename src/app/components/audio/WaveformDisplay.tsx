@@ -15,7 +15,9 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({
 }) => {
   const progressIncrement = 100 / waveform.length;
 
-  useEffect(() => {}, [progress]);
+  useEffect(() => {
+
+  }, [progress]);
 
   return (
     <div className="flex ml-8 mr-8">
@@ -25,10 +27,10 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({
             <div
               key={index}
               style={{ height: `${value * height}px` }}
-              className={`transition ${
-                index * progressIncrement <= progress && audioPlaying === true
+              className={` ${ 
+                (index * progressIncrement) - progressIncrement <= progress && audioPlaying === true
                   ? "bg-secondary"
-                  : "bg-primary-content/50"
+                  : "ease-out duration-500 bg-primary-content/50 "
               } rounded-sm w-1 m-px self-center select-none`}
             ></div>
           );

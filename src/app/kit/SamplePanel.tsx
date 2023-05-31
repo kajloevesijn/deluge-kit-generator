@@ -5,6 +5,7 @@ import { IconButton } from "../components/IconButton";
 import { useSampleContext } from "../components/contexts/SampleContext";
 import WaveFormDisplay from "../components/audio/WaveformDisplay";
 import useAudioPlayer from "../components/audio/useAudioPlayer";
+import { TextInputField } from "../components/TextInputField";
 
 export const SamplePanel = ({ ...props }) => {
   const { sampleList, removeSample } = useSampleContext();
@@ -41,6 +42,10 @@ export const SamplePanel = ({ ...props }) => {
     removeSample(props.index);
   }
 
+  function updateCategory(value:string){
+    sampleList[props.index].category = value;
+  }
+
   useEffect(() => {
     return () => clearInterval(playInterval.current);
   }, []);
@@ -53,6 +58,7 @@ export const SamplePanel = ({ ...props }) => {
           : ""
       } `}
     >
+      
       {isAudioPlaying() !== true && (
         <IconButton
           buttonHandler={onPlaySample}
@@ -70,6 +76,8 @@ export const SamplePanel = ({ ...props }) => {
         />
       )}
 
+      <p className="text-base-content">{(props.index + 1).toString() + ":"}</p>
+
       <p className="grow truncate text-base-content select-none">
         {props.sampleName}
       </p>
@@ -79,6 +87,8 @@ export const SamplePanel = ({ ...props }) => {
         height={40}
         audioPlaying={isAudioPlaying()}
       />
+      
+      <TextInputField prefix="" inputDefault={sampleList[props.index].category} customDivClass={'mr-8'} customPrefixClass={'mr-2'} valueChanged={updateCategory} customInputClass={'w-40 h-8'}/>
       <IconButton
         buttonHandler={removeSamplePanel}
         index={props.index}

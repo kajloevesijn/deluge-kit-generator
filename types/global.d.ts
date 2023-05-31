@@ -4,5 +4,7 @@ declare interface SampleData {
   audioBuffer: AudioBuffer;
   waveformCache: number[];
   sampleLengthInSeconds: number;
+  category: string;
   file: File;
+  uid: string;
 }

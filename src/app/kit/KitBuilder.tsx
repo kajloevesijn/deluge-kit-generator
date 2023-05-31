@@ -4,19 +4,15 @@ import { SamplePanel } from "./SamplePanel";
 import { FileDropArea } from "../components/FileDropArea";
 import { FolderPlusIcon } from "@heroicons/react/24/solid";
 import { useSampleContext } from "../components/contexts/SampleContext";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-  DragStart,
-} from "@hello-pangea/dnd";
+import { DragDropContext,Droppable,Draggable,DropResult,DragStart,} from "@hello-pangea/dnd";
 import { DescriptiveButton } from "../components/DescriptiveButton";
-import { createExport } from "../components/FileZipper";
 import export_kit from "../components/KitExporter";
+import { TextInputFieldWithRandomizer } from "../components/TextInputFieldWithRandomizer";
+import { RandomWords } from "../components/RandomWords";
 
 export const KitBuilder = () => {
   const { sampleList, addSamples, rebuildList } = useSampleContext();
+  const [presetName,setPresetName] = useState("default");
   let dragging = false;
 
   function dragEnded(result: DropResult) {
@@ -37,6 +33,14 @@ export const KitBuilder = () => {
     }
   }
 
+  function randomizePresetName(){
+    setPresetName(RandomWords());
+  }
+
+  function updatePresetName(value:string){
+    setPresetName(value);
+  }
+
   function dragStarted(result: DragStart) {
     dragging = true;
   }
@@ -46,14 +50,13 @@ export const KitBuilder = () => {
       <div className="flex my-4 align-middle items-center">
         <DescriptiveButton name="BACK" link="/" />
         <div className="grow">
-          <p className="text-base-content align-middle text-center h-full font-bold text-2xl select-none">
-            KIT
-          </p>
+
+        <TextInputFieldWithRandomizer valueChanged={updatePresetName} buttonHandler={randomizePresetName} inputDefault={presetName} customDivClass={'px-8'} customInputClass={'text-2xl'}/>
         </div>
         <button
           className="btn btn-md btn-primary z-10"
           onClick={() => {
-            export_kit(sampleList);
+            export_kit(sampleList,presetName);
           }}
         >
           export kit
@@ -62,6 +65,9 @@ export const KitBuilder = () => {
       </div>
 
       <div className="">
+        <div className="mb-4">
+          
+        </div>
         <div className="">
           <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
             <Droppable droppableId={"sampleList"}>
@@ -73,12 +79,12 @@ export const KitBuilder = () => {
                 >
                   {sampleList.map((listPos, index) => (
                     <Draggable
-                      draggableId={index.toString()}
-                      key={index}
+                      draggableId={listPos.uid}
+                      key={listPos.uid}
                       index={index}
                     >
                       {(provided, snapshot) => (
-                        <div
+                        <div className={`z-[${sampleList.length * 10 - index * 10}]`}
                           key={index}
                           {...provided.dragHandleProps}
                           {...provided.draggableProps}

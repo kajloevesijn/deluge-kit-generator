@@ -57,7 +57,7 @@ export default class KitTemplate {
                     reversed="0"
                     timeStretchEnable="0"
                     timeStretchAmount="0"
-                    fileName="SAMPLES/Kit maker/${"default"}/${input_data.name.toString()}">
+                    fileName="SAMPLES/Kit builder/${input_data.category}/${input_data.name.toString()}">
                     <zone
                         startSamplePos="0"
                         endSamplePos="${input_data.sampleCount}" />

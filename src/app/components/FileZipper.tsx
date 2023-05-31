@@ -8,12 +8,11 @@ export function createExport(
 ) {
   const zip = new JSZip();
   const sampleFolder = zip.folder("SAMPLES");
-  const presetFolder = zip.folder("KIT");
+  const presetFolder = zip.folder("KITS");
+  const kitDefaultFolder = sampleFolder?.folder("kit builder");
 
-  if (!sampleFolder || !presetFolder) {
-    return;
-  }
-
+  if (!sampleFolder || !presetFolder || !kitDefaultFolder) return;
+  
   presetFolder.file(presetFileName + ".xml", presetContent);
 
   const promises = samplesToZip.map((sample) => {
@@ -22,7 +21,18 @@ export function createExport(
 
       reader.onload = function () {
         // Add the file content to the zip
-        sampleFolder.file(sample.file.name, reader.result as ArrayBuffer);
+
+        if(sample.category === "" ||sample.category === undefined || sample.category === null){ 
+          kitDefaultFolder.file(sample.file.name, reader.result as ArrayBuffer);
+          resolve();
+        }
+
+        const categoryFolder = kitDefaultFolder.folder(sample.category);
+
+        if(!categoryFolder) return;
+
+        categoryFolder.file(sample.file.name, reader.result as ArrayBuffer);
+
         resolve();
       };
 
