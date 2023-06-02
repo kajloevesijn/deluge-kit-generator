@@ -94,7 +94,7 @@ export const FileDropArea = ({ ...props }) => {
 
   return (
     <div
-      className="rounded-xl bg-base-300/50 border-primary border-2 border-dashed text-base-content backdrop-blur-sm p-8 mt-4"
+      className="rounded-xl bg-base-300/50 border-primary border-2 border-dashed text-base-content backdrop-blur-sm p-8"
       onDrop={processDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}

@@ -65,10 +65,10 @@ export const KitBuilder = () => {
       </div>
 
       <div className="">
-        <div className="mb-4">
+        <div className="mb-8">
           
         </div>
-        <div className="">
+        <div className="mb-4">
           <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
             <Droppable droppableId={"sampleList"}>
               {(provided) => (
@@ -104,13 +104,13 @@ export const KitBuilder = () => {
               )}
             </Droppable>
           </DragDropContext>
-          {sampleList.length !== 0 && <div className="m-0.5"></div>}
+          </div>
           <FileDropArea
             onDropAccepted={addSamples}
             Icon={FolderPlusIcon}
             descriptionText="drag your .wav files of up to 10mb per file here"
           />
-        </div>
+        
       </div>
     </>
   );

@@ -76,9 +76,9 @@ export const SamplePanel = ({ ...props }) => {
         />
       )}
 
-      <p className="text-base-content">{(props.index + 1).toString() + ":"}</p>
+      <p className="text-base-content font-mono">{(props.index + 1).toString() + ":"}</p>
 
-      <p className="grow truncate text-base-content select-none">
+      <p className="grow truncate text-base-content select-none font-mono">
         {props.sampleName}
       </p>
       <WaveFormDisplay
@@ -87,14 +87,17 @@ export const SamplePanel = ({ ...props }) => {
         height={40}
         audioPlaying={isAudioPlaying()}
       />
-      
+      <div className="tooltip" data-tip="sample directory">
       <TextInputField prefix="" inputDefault={sampleList[props.index].category} customDivClass={'mr-8'} customPrefixClass={'mr-2'} valueChanged={updateCategory} customInputClass={'w-40 h-8'}/>
+      </div>
+      <div className="tooltip" data-tip="delete from list">
       <IconButton
         buttonHandler={removeSamplePanel}
         index={props.index}
         buttonSize={40}
         Icon={XMarkIcon}
       />
+      </div>
     </div>
   );
 };

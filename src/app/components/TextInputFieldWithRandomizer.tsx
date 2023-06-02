@@ -58,9 +58,9 @@ export const TextInputFieldWithRandomizer = ({ ...props }) => {
 
   return (
     <div className={`flex ${props.customDivClass}`}>
-      <p className={`self-center ${props.customPrefixClass}`}>{props.prefix}</p>
+      <p className={`self-center font-mono ${props.customPrefixClass}`}>{props.prefix}</p>
       <input
-        className={`text-center input bg-base-100 text-base-content duration-200 hover:border-primary-focus input-bordered border-primary border-2 z-10 w-full pl-14 ${
+        className={`text-center font-mono input bg-base-100 text-base-content duration-200 hover:border-primary-focus input-bordered border-primary border-2 z-10 w-full pl-14 ${
           inputValue != "default" ? "text-primary-content" : ""
         } ${props.customInputClass}`}
         onFocus={(e) => e.target.select()}
