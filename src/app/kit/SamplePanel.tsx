@@ -8,21 +8,21 @@ import useAudioPlayer from "../components/audio/useAudioPlayer";
 import { TextInputField } from "../components/TextInputField";
 
 export const SamplePanel = ({ ...props }) => {
-  const { sampleList, removeSample } = useSampleContext();
+  const { sampleList, removeSample, rebuildList } = useSampleContext();
   const [playProgress, setPlayProgress] = useState(0);
   const { playAudio, stopAudio, isAudioPlaying } = useAudioPlayer();
 
-  const playInterval = useRef<NodeJS.Timer>();
+  const playInterval = useRef<number | undefined>(undefined);
 
   function onPlaySample() {
     setPlayProgress(-1);
     playAudio(sampleList[props.index].audioBuffer);
-    playInterval.current = setInterval(incrementProgress, 10);
+    playInterval.current = window.setInterval(incrementProgress, 10);
   }
 
   function onStopSample() {
     setPlayProgress(-1);
-    clearInterval(playInterval.current);
+    window.clearInterval(playInterval.current);
     stopAudio();
   }
 
@@ -31,7 +31,7 @@ export const SamplePanel = ({ ...props }) => {
       let nextProgress =
         prevProgress + 1 / sampleList[props.index].sampleLengthInSeconds;
       if (nextProgress >= 100) {
-        clearInterval(playInterval.current);
+        window.clearInterval(playInterval.current);
       }
       return nextProgress;
     });
@@ -43,11 +43,15 @@ export const SamplePanel = ({ ...props }) => {
   }
 
   function updateCategory(value:string){
-    sampleList[props.index].category = value;
+    // Immutable update: react-hooks/immutability forbids mutating the
+    // context's state array in place.
+    const updated = [...sampleList];
+    updated[props.index] = { ...updated[props.index], category: value };
+    rebuildList(updated);
   }
 
   useEffect(() => {
-    return () => clearInterval(playInterval.current);
+    return () => window.clearInterval(playInterval.current);
   }, []);
 
   return (
@@ -88,7 +92,9 @@ export const SamplePanel = ({ ...props }) => {
         audioPlaying={isAudioPlaying()}
       />
       <div className="tooltip" data-tip="sample directory">
-      <TextInputField prefix="" inputDefault={sampleList[props.index].category} customDivClass={'mr-8'} customPrefixClass={'mr-2'} valueChanged={updateCategory} customInputClass={'w-40 h-8'}/>
+      {/* key: remount (fresh seed state) when the sample at this slot changes
+          after a removal, instead of syncing state in an effect */}
+      <TextInputField key={sampleList[props.index].uid} prefix="" inputDefault={sampleList[props.index].category} customDivClass={'mr-8'} customPrefixClass={'mr-2'} valueChanged={updateCategory} customInputClass={'w-40 h-8'}/>
       </div>
       <div className="tooltip" data-tip="delete from list">
       <IconButton

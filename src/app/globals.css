@@ -1,3 +1,227 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: false;
+}
+@plugin "@tailwindcss/typography";
+
+/*
+ * daisyUI 2.x default "light" and "dark" themes, reproduced value-for-value
+ * (HSL taken from daisyui 2.51.6 dist :root + [data-theme=dark]). daisyUI 5
+ * dropped the "-focus" colors, so they are added below via @theme and
+ * re-scoped per theme, exactly as daisyUI 2 resolved them (focus = same hue,
+ * -10% lightness).
+ */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  color-scheme: light;
+  --color-base-100: hsl(0 0% 100%);
+  --color-base-200: hsl(0 0% 94.902%);
+  --color-base-300: hsl(180 1.9608% 90%);
+  --color-base-content: hsl(215 27.907% 16.863%);
+  --color-primary: hsl(258.89 94.378% 51.176%);
+  --color-primary-content: hsl(0 0% 100%);
+  --color-secondary: hsl(314 100% 47.059%);
+  --color-secondary-content: hsl(0 0% 100%);
+  --color-accent: hsl(174 60% 50.98%);
+  --color-accent-content: hsl(174.71 43.59% 15.294%);
+  --color-neutral: hsl(219 14.085% 27.843%);
+  --color-neutral-content: hsl(0 0% 100%);
+  --color-info: hsl(198 93% 60%);
+  --color-info-content: hsl(198 100% 12%);
+  --color-success: hsl(158 64% 52%);
+  --color-success-content: hsl(158 100% 10%);
+  --color-warning: hsl(43 96% 56%);
+  --color-warning-content: hsl(43 100% 11%);
+  --color-error: hsl(0 91% 71%);
+  --color-error-content: hsl(0 100% 14%);
+  --radius-box: 1rem;
+  --radius-field: 0.5rem;
+  --radius-selector: 0.5rem;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  /* daisyUI 2 auto-applied the dark theme under prefers-color-scheme: dark;
+     layout.tsx's hardcoded data-theme="dark" still takes precedence, so this
+     only matters for users without the attribute set explicitly. */
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: hsl(220 17.647% 20%);
+  --color-base-200: hsl(220 17.241% 17.059%);
+  --color-base-300: hsl(218.57 17.949% 15.294%);
+  --color-base-content: hsl(220 13.376% 69.216%);
+  --color-primary: hsl(262.35 80.315% 50.196%);
+  --color-primary-content: hsl(0 0% 100%);
+  --color-secondary: hsl(315.75 70.196% 50%);
+  --color-secondary-content: hsl(0 0% 100%);
+  --color-accent: hsl(174.69 70.335% 40.98%);
+  --color-accent-content: hsl(0 0% 100%);
+  --color-neutral: hsl(218.18 18.033% 11.961%);
+  --color-neutral-content: hsl(220 13.376% 69.216%);
+  --color-info: hsl(198 93% 60%);
+  --color-info-content: hsl(198 100% 12%);
+  --color-success: hsl(158 64% 52%);
+  --color-success-content: hsl(158 100% 10%);
+  --color-warning: hsl(43 96% 56%);
+  --color-warning-content: hsl(43 100% 11%);
+  --color-error: hsl(0 91% 71%);
+  --color-error-content: hsl(0 100% 14%);
+  --radius-box: 1rem;
+  --radius-field: 0.5rem;
+  --radius-selector: 0.5rem;
+}
+
+/* Tailwind 4 generates utilities from @theme vars; register the daisyUI 2
+   "-focus" colors so the border, ring and bg "primary-focus"-style utilities
+   keep working. Light values are the default; dark values override under
+   [data-theme=dark] below. */
+@theme {
+  --color-primary-focus: hsl(258.89 94.378% 40.941%);
+  --color-secondary-focus: hsl(314 100% 37.647%);
+  --color-accent-focus: hsl(174 60% 40.784%);
+  --color-neutral-focus: hsl(219 14.085% 22.275%);
+  /* daisyUI 2-era custom shadow, restored verbatim from the deleted
+     tailwind.config.js of this branch (alpha .6, as shipped here; Tailwind 4's
+     drop-shadow utility wraps each comma-separated part of --drop-shadow-*
+     values in drop-shadow() itself, so this stays a raw shadow value). */
+  --drop-shadow-hard: 0 16px 16px rgba(0, 0, 0, .6);
+}
+
+[data-theme="dark"] {
+  --color-primary-focus: hsl(262.35 80.315% 40.157%);
+  --color-secondary-focus: hsl(315.75 70.196% 40%);
+  --color-accent-focus: hsl(174.69 70.335% 32.784%);
+  --color-neutral-focus: hsl(222.86 17.073% 8.0392%);
+}
+
+/* daisyUI 2 .btn behaviors dropped in daisyUI 5, ported verbatim from
+   daisyui@2.51.6 dist/full.css (the version this app shipped with):
+   the .btn base rule's text-transform/animation declarations and the
+   ".btn:active:hover,.btn:active:focus" press rule. daisyUI 5's .btn sets
+   none of these properties, so this is purely additive. */
+@layer components {
+  .btn {
+    text-transform: uppercase;
+    text-transform: var(--btn-text-case, uppercase);
+    animation: button-pop var(--animation-btn, .25s) ease-out;
+  }
+
+  .btn:active:hover,
+  .btn:active:focus {
+    transform: scale(var(--btn-focus-scale, .95));
+    animation: none;
+  }
+}
+
+/*
+ * daisyUI 2 sizing/behavior dropped in daisyUI 5, ported verbatim from
+ * daisyui@2.51.6 dist/full.css.
+ *
+ * These rules are deliberately NOT inside a @layer: daisyUI 5 ships its
+ * components in @layer daisyui, which — there being no @layer order
+ * statement in the compiled bundle — is first declared after the
+ * theme/base/components/utilities layers and therefore wins every conflict
+ * against them at equal specificity (cascade layers are compared before
+ * specificity). Unlayered author rules are the only thing in this file that
+ * beats @layer daisyui.
+ */
+
+/* v2 .btn base sizing: "height: 3rem; min-height: 3rem; padding-left: 1rem;
+   padding-right: 1rem". v5 sizes from --size (2.5rem) and sets no
+   min-height, so every .btn rendered ~8px shorter. line-height is v2's
+   "1em" (v5 sets none, so children inherit preflight 1.5 and text inside
+   .btn renders ~3.5px lower). flex-wrap is v2's "wrap" (v5 sets nowrap):
+   with oversized children (DescriptiveButton's inner <button>), wrap keeps
+   the flex line at content-top; nowrap centers it, shifting content 8px. */
+.btn {
+  height: 3rem;
+  min-height: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 1em;
+  flex-wrap: wrap;
+}
+
+/* v2 .btn-square: "height: 3rem; width: 3rem; padding: 0". Required because
+   the unlayered .btn rule above outranks v5's own
+   ".btn-square { padding-inline: 0px; width: var(--size); height: var(--size) }"
+   (layer priority beats it) and would otherwise re-add inline padding. */
+.btn-square {
+  height: 3rem;
+  width: 3rem;
+  padding: 0;
+}
+
+/* v2 .input sizing: height 3rem (v5 shrinks it to 2.5rem via
+   --in-size-mul:10) and padding-x 1rem (v5: .75rem), ported from
+   daisyui@2.51.6 dist/full.css. Layer-position-independent form: no utility
+   in this app sets --in-size-mul or padding-right on an input, and the one
+   pl-* utility (pl-14 on the preset input) is excluded explicitly, so
+   utilities keep winning padding-left exactly as they did in v2. */
+.input {
+  --in-size-mul: 12;
+  padding-right: 1rem;
+}
+.input:not(.pl-14) {
+  padding-left: 1rem;
+}
+
+/* v2 styled only :disabled/.btn-disabled — a Link rendered with
+   aria-disabled="true" kept its normal variant's look and stayed clickable.
+   daisyUI 5 added:
+     .btn-disabled, .btn:is(:disabled, [disabled], [aria-disabled="true"]) {
+       pointer-events: none;
+       color: color-mix(in oklch, var(--color-base-content) 20%, #0000);
+       --btn-bg: #0000;
+       --btn-border: #0000;
+       background-image: none;
+       --btn-inset: 0 0 0 0 oklch(0% 0 0/0);
+       --btn-shadow: 0 0 0 0 oklch(0% 0 0/0);
+     }
+     :is(.btn-disabled, .btn:is(:disabled, [disabled],
+         [aria-disabled="true"])):not(.btn-link, .btn-ghost) {
+       background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+     }
+   Scoped to [aria-disabled="true"] only (real :disabled/[disabled] keep
+   v5's gray treatment), restoring the base .btn value of every property the
+   v5 rule claims, so an aria-disabled button renders exactly like its
+   normal variant, as in v2. */
+.btn[aria-disabled="true"] {
+  pointer-events: auto;
+  color: var(--btn-fg, var(--color-base-content));
+  --btn-bg: var(--btn-color, var(--color-base-200));
+  --btn-border: color-mix(
+    in oklab,
+    var(--btn-color, var(--color-base-200)),
+    #000 calc(var(--depth) * 5%)
+  );
+  background-image: none, var(--fx-noise);
+  --btn-inset: 0 0.5px 0 0.5px oklch(100% 0 0 / calc(var(--depth) * 6%));
+  --btn-shadow:
+    0 3px 2px -2px
+      color-mix(in oklab, var(--btn-bg) calc(var(--depth) * 30%), #0000),
+    0 4px 3px -2px
+      color-mix(in oklab, var(--btn-bg) calc(var(--depth) * 30%), #0000);
+  background-color: var(--btn-bg);
+}
+
+/* v2 .card-body: "padding: var(--padding-card, 2rem)"; v5 defaults
+   --card-p to 1.5rem. v2's gap (.5rem) matches v5's calc(0.25rem * 2),
+   so no gap override is needed. Note: no .card-body element currently
+   exists in the app DOM; kept for v2 parity. */
+.card-body {
+  padding: var(--card-p, 2rem);
+}
+
+@keyframes button-pop {
+  0% {
+    transform: scale(var(--btn-focus-scale, .95));
+  }
+  40% {
+    transform: scale(1.02);
+  }
+  to {
+    transform: scale(1);
+  }
+}

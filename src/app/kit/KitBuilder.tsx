@@ -13,11 +13,13 @@ import { RandomWords } from "../components/RandomWords";
 export const KitBuilder = () => {
   const { sampleList, addSamples, rebuildList } = useSampleContext();
   const [presetName,setPresetName] = useState("default");
-  let dragging = false;
+  // Ref (not state): drag flags are read by event handlers only, and mutating
+  // a closure variable across renders is what react-hooks/immutability bans.
+  const draggingRef = useRef(false);
 
   function dragEnded(result: DropResult) {
     const { source, destination, type } = result;
-    dragging = false;
+    draggingRef.current = false;
 
     if (source.index === destination?.index) {
       return;
@@ -42,7 +44,7 @@ export const KitBuilder = () => {
   }
 
   function dragStarted(result: DragStart) {
-    dragging = true;
+    draggingRef.current = true;
   }
 
   return (

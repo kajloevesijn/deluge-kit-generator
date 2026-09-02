@@ -1,0 +1,9 @@
+{
+  "name": "lint-typescript",
+  "version": "0.0.0",
+  "private": true,
+  "description": "TypeScript 6.x sidecar for the ESLint toolchain only. typescript-eslint cannot drive the native TypeScript 7 distribution (no JS compiler API), so scripts/lint.cjs resolves 'typescript' to this nested copy. Kept as a file: dependency so its binaries nest here instead of colliding with the project's TypeScript 7 in node_modules/.bin.",
+  "dependencies": {
+    "typescript": "6.0.3"
+  }
+}

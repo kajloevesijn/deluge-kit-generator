@@ -1,5 +1,5 @@
-import React, { useState } from "react"; 
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
 
 function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,7 @@ function Dropdown() {
     return null;  // Or return some sort of error message or fallback component
   }
 
-  return ReactDOM.createPortal(
+  return createPortal(
     <div className="dropdown dropdown-hover" style={{ position: 'absolute' }}>
       <label tabIndex={0} className="btn m-1 ">
         {selected}

@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, { useState } from "react";
 
 export const TextInputField = ({...props}) => {
-    const [inputValue, setInputValue] = useState("");
-
-    useEffect(()=>{
-        setInputValue(props.inputDefault);
-    },[props.inputDefault])
+    // Seeded from the prop; the parent remounts this component (key on uid)
+    // when the underlying sample changes, so no sync-in-effect is needed.
+    const [inputValue, setInputValue] = useState(props.inputDefault);
 
     return <div className={`flex ${props.customDivClass}`}>
         <p className={`self-center ${props.customPrefixClass}`}>{props.prefix}</p>
