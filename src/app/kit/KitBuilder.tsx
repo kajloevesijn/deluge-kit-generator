@@ -15,11 +15,13 @@ import { DescriptiveButton } from "../components/DescriptiveButton";
 
 export const KitBuilder = () => {
   const { sampleList, addSamples, rebuildList } = useSampleContext();
-  let dragging = false;
+  // Ref (not state): drag flags are read by event handlers only, and mutating
+  // a closure variable across renders is what react-hooks/immutability bans.
+  const draggingRef = useRef(false);
 
   function dragEnded(result: DropResult) {
     const { source, destination, type } = result;
-    dragging = false;
+    draggingRef.current = false;
 
     if (source.index === destination?.index) {
       return;
@@ -36,7 +38,7 @@ export const KitBuilder = () => {
   }
 
   function dragStarted(result: DragStart) {
-    dragging = true;
+    draggingRef.current = true;
   }
 
   return (
@@ -52,7 +54,7 @@ export const KitBuilder = () => {
         {/* TODO: when re-occuring, create a new react component for this button */}
       </div>
 
-      <div className="card card-bordered w-full bg-base-100/20">
+      <div className="card card-border w-full bg-base-100/20">
         <div className="p-2">
           <DragDropContext onDragEnd={dragEnded} onDragStart={dragStarted}>
             <Droppable droppableId={"sampleList"}>

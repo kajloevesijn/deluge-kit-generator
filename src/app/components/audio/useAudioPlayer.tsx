@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Define a React Hook for playing audio
 const useAudioPlayer = () => {
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  // The AudioContext is only read inside event callbacks, never rendered, so a
+  // ref avoids the setState-in-effect cascade (and keeps StrictMode honest).
+  const audioContextRef = useRef<AudioContext | null>(null);
   const [source, setSource] = useState<AudioBufferSourceNode | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
     const context = new AudioContext();
-    setAudioContext(context);
+    audioContextRef.current = context;
 
     return () => {
       context.close();
+      audioContextRef.current = null;
     };
   }, []);
 
@@ -23,6 +26,7 @@ const useAudioPlayer = () => {
   }
 
   const playAudio = (audioBuffer: AudioBuffer) => {
+    const audioContext = audioContextRef.current;
     if (!audioContext) return;
     source?.disconnect();
 
