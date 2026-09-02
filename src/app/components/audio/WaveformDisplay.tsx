@@ -31,7 +31,7 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({
                 (index * progressIncrement) - progressIncrement <= progress && audioPlaying === true
                   ? "bg-secondary"
                   : "ease-out duration-500 bg-primary-content/50 "
-              } rounded-sm w-1 m-px self-center select-none`}
+              } rounded-xs w-1 m-px self-center select-none`}
             ></div>
           );
         })}

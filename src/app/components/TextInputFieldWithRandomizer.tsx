@@ -3,14 +3,29 @@ import { CogIcon } from "@heroicons/react/24/solid";
 import { AnimatedIconButton } from "./AnimatedIconButton";
 
 export const TextInputFieldWithRandomizer = ({ ...props }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [displayValue, setDisplayValue] = useState("");
+  // Seeded from inputDefault (KitBuilder starts at "default"): replaces the
+  // old mount effect without violating react-hooks v6. inputDefault only
+  // changes after mount via this component's own valueChanged/cog flow, which
+  // the lastDefault guard below handles.
+  const [inputValue, setInputValue] = useState(props.inputDefault);
+  const [displayValue, setDisplayValue] = useState(props.inputDefault);
   const [scrambling, setScrambling] = useState(false);
+  const [lastDefault, setLastDefault] = useState(props.inputDefault);
 
-  useEffect(() => {
+  // Adjust state during render when the parent pushes a new preset name
+  // (randomizer button) — the React-documented alternative to
+  // setState-in-effect.
+  if (lastDefault !== props.inputDefault) {
+    setLastDefault(props.inputDefault);
     setInputValue(props.inputDefault);
     setDisplayValue(props.inputDefault);
-  }, [props.inputDefault]);
+  }
+
+  const getRandomLetter = () => {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const randomIndex = Math.floor(Math.random() * alphabet.length);
+    return alphabet[randomIndex];
+  };
 
   function buttonHandler() {
     setScrambling(true);
@@ -49,12 +64,6 @@ export const TextInputFieldWithRandomizer = ({ ...props }) => {
       clearInterval(revealInterval);
     };
   }, [inputValue]);
-
-  const getRandomLetter = () => {
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    const randomIndex = Math.floor(Math.random() * alphabet.length);
-    return alphabet[randomIndex];
-  };
 
   return (
     <div className={`flex ${props.customDivClass}`}>

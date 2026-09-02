@@ -8,21 +8,16 @@ export const FileDropArea = ({ ...props }) => {
   const {sampleList} = useSampleContext();
 
   const [error, setError] = useState("");
-  const [errorResetIntervalId, setErrorResetIntervalId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (error !== "") {
-      const intervalId = window.setInterval(() => {
-        setError("");
-      }, 5000);
-      setErrorResetIntervalId(intervalId);
-    }
+    if (error === "") return;
+    const intervalId = window.setInterval(() => {
+      setError("");
+    }, 5000);
 
     return () => {
-      if (errorResetIntervalId !== null) {
-        window.clearInterval(errorResetIntervalId);
-      }
-    }
+      window.clearInterval(intervalId);
+    };
   }, [error]);
 
   function processDrop(event: React.DragEvent<HTMLDivElement>) {
