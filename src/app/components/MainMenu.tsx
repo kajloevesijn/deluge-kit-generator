@@ -31,6 +31,7 @@ export default function MainMenu() {
           <div className="mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-6 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:gap-8">
             {buttons.map((button) => (
               <DescriptiveButton
+                key={button.name}
                 name={button.name}
                 link={button.link}
                 disabled={button.disabled}

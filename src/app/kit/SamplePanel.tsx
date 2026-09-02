@@ -14,17 +14,17 @@ export const SamplePanel = ({ ...props }) => {
   const [ playProgress, setPlayProgress ] = useState(0);
   const {playAudio,stopAudio,isAudioPlaying} = useAudioPlayer();
 
-  const playInterval = useRef<NodeJS.Timer>();
+  const playInterval = useRef<number | undefined>(undefined);
 
   function onPlaySample(){
     setPlayProgress(-1);
     playAudio(sampleList[props.index].audioBuffer);
-    playInterval.current = setInterval(incrementProgress, 10);
+    playInterval.current = window.setInterval(incrementProgress, 10);
   }
 
   function onStopSample(){
     setPlayProgress(-1);
-    clearInterval(playInterval.current);
+    window.clearInterval(playInterval.current);
     stopAudio();
   }
 
@@ -33,19 +33,19 @@ export const SamplePanel = ({ ...props }) => {
       let nextProgress = prevProgress + (1 / sampleList[props.index].sampleLengthInSeconds);
       console.log(nextProgress);
       if(nextProgress >= 100){
-        clearInterval(playInterval.current);
+        window.clearInterval(playInterval.current);
       }
       return nextProgress;
     });
   }
 
   function removeSamplePanel(){
-    clearInterval(playInterval.current);
+    window.clearInterval(playInterval.current);
     removeSample(props.index)
   }
 
   useEffect(() => {
-    return () => clearInterval(playInterval.current);
+    return () => window.clearInterval(playInterval.current);
   }, []);
 
   return (

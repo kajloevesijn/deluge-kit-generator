@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import React, { useRef, useState } from 'react'
-import {useFrame, ThreeElements } from '@react-three/fiber'
+import { useFrame, type ThreeElements } from '@react-three/fiber'
 
 export default function Box(props: ThreeElements['mesh']) {
   const mesh = useRef<THREE.Mesh>(null!)

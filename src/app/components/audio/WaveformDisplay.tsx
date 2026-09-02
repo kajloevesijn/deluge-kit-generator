@@ -24,7 +24,7 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({waveform,progress,heig
               <div
               key={index}
               style={{ height: `${value * height}px` }}
-              className={`rounded-sm w-1 m-0.5 bg-accent ring-2 ring-primary self-center select-none`}
+              className={`rounded-xs w-1 m-0.5 bg-accent ring-2 ring-primary self-center select-none`}
             ></div>
             )
           }else{
@@ -32,7 +32,7 @@ const WaveFormDisplay: React.FC<WaveFormDisplayProps> = ({waveform,progress,heig
               <div
               key={index}
               style={{ height: `${value * height}px` }}
-              className={`rounded-sm w-1 m-0.5 bg-primary-content ring-2 ring-primary self-center select-none`}
+              className={`rounded-xs w-1 m-0.5 bg-primary-content ring-2 ring-primary self-center select-none`}
             ></div>
             )
           }
