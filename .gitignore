@@ -2,8 +2,15 @@
 
 # dependencies
 /node_modules
+# nested install of the tools/lint-typescript sidecar
+tools/lint-typescript/node_modules
 /.pnp
-.pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
 /coverage
@@ -33,3 +40,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editors / IDE junk
+/.vs/
+/.vscode/*
+!/.vscode/extensions.json
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# local databases / caches
+*.sqlite
+*.sqlite3
+*.db
+.env*
