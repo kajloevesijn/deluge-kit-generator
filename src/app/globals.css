@@ -113,6 +113,86 @@
   }
 }
 
+/*
+ * daisyUI 2 sizing/behavior dropped in daisyUI 5, ported verbatim from
+ * daisyui@2.51.6 dist/full.css.
+ *
+ * These rules are deliberately NOT inside a @layer: daisyUI 5 ships its
+ * components in @layer daisyui, which — there being no @layer order
+ * statement in the compiled bundle — is first declared after the
+ * theme/base/components/utilities layers and therefore wins every conflict
+ * against them at equal specificity (cascade layers are compared before
+ * specificity). Unlayered author rules are the only thing in this file that
+ * beats @layer daisyui.
+ */
+
+/* v2 .btn base sizing: "height: 3rem; min-height: 3rem; padding-left: 1rem;
+   padding-right: 1rem". v5 sizes from --size (2.5rem) and sets no
+   min-height, so every .btn rendered ~8px shorter. */
+.btn {
+  height: 3rem;
+  min-height: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* v2 .btn-square: "height: 3rem; width: 3rem; padding: 0". Required because
+   the unlayered .btn rule above outranks v5's own
+   ".btn-square { padding-inline: 0px; width: var(--size); height: var(--size) }"
+   (layer priority beats it) and would otherwise re-add inline padding. */
+.btn-square {
+  height: 3rem;
+  width: 3rem;
+  padding: 0;
+}
+
+/* v2 styled only :disabled/.btn-disabled — a Link rendered with
+   aria-disabled="true" kept its normal variant's look and stayed clickable.
+   daisyUI 5 added:
+     .btn-disabled, .btn:is(:disabled, [disabled], [aria-disabled="true"]) {
+       pointer-events: none;
+       color: color-mix(in oklch, var(--color-base-content) 20%, #0000);
+       --btn-bg: #0000;
+       --btn-border: #0000;
+       background-image: none;
+       --btn-inset: 0 0 0 0 oklch(0% 0 0/0);
+       --btn-shadow: 0 0 0 0 oklch(0% 0 0/0);
+     }
+     :is(.btn-disabled, .btn:is(:disabled, [disabled],
+         [aria-disabled="true"])):not(.btn-link, .btn-ghost) {
+       background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+     }
+   Scoped to [aria-disabled="true"] only (real :disabled/[disabled] keep
+   v5's gray treatment), restoring the base .btn value of every property the
+   v5 rule claims, so an aria-disabled button renders exactly like its
+   normal variant, as in v2. */
+.btn[aria-disabled="true"] {
+  pointer-events: auto;
+  color: var(--btn-fg, var(--color-base-content));
+  --btn-bg: var(--btn-color, var(--color-base-200));
+  --btn-border: color-mix(
+    in oklab,
+    var(--btn-color, var(--color-base-200)),
+    #000 calc(var(--depth) * 5%)
+  );
+  background-image: none, var(--fx-noise);
+  --btn-inset: 0 0.5px 0 0.5px oklch(100% 0 0 / calc(var(--depth) * 6%));
+  --btn-shadow:
+    0 3px 2px -2px
+      color-mix(in oklab, var(--btn-bg) calc(var(--depth) * 30%), #0000),
+    0 4px 3px -2px
+      color-mix(in oklab, var(--btn-bg) calc(var(--depth) * 30%), #0000);
+  background-color: var(--btn-bg);
+}
+
+/* v2 .card-body: "padding: var(--padding-card, 2rem)"; v5 defaults
+   --card-p to 1.5rem. v2's gap (.5rem) matches v5's calc(0.25rem * 2),
+   so no gap override is needed. Note: no .card-body element currently
+   exists in the app DOM; kept for v2 parity. */
+.card-body {
+  padding: var(--card-p, 2rem);
+}
+
 @keyframes button-pop {
   0% {
     transform: scale(var(--btn-focus-scale, .95));
